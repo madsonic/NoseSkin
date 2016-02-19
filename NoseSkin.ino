@@ -10,7 +10,6 @@ const int buttonAnalogPort = A0;
 const int tempAnalogPort = A1;
 const int gasAnalogPort = A2;
 
-int screenState = 0;
 int previousBtnState = 0;
 int currentBtnState = 0;
 unsigned long previousTime = 0;
@@ -51,14 +50,11 @@ void loop() {
     previousBtnState = currentBtnState;
 
     if (previousBtnState == 0) {
-      screenState = 0;
       lcd.clear();
       lcd.print("Temperature");
       lcd.setCursor(0, 1);
       lcd.print("Gas");
-    } else if (screenState == 0 && previousBtnState == 1) {
-      screenState = 1;
-
+    } else if (previousBtnState == 1) {
       int tempAnalogVal = analogRead(tempAnalogPort);
       float tempVolt = (tempAnalogVal / 1024.0) * 5;
       float temp = (tempVolt - 0.5) * 100;
@@ -69,9 +65,7 @@ void loop() {
       lcd.print(temp);
       lcd.print(" C");
       // do lighting also
-    } else if (screenState == 0 && previousBtnState == 2){
-      screenState = 2;
-
+    } else if (previousBtnState == 2){
       lcd.clear();
       lcd.print("CO2: ");
       lcd.print(gasSensor.getPPM());
